@@ -26,4 +26,15 @@ class ManagePropertyTest extends TestCase
     {
         $this->get('/')->assertRedirect('/properties');
     }
+
+    public function test_it_can_view_specific_property_resource()
+    {
+        $this->withoutExceptionHandling();
+
+        $property = factory(Property::class)->create();
+
+        $this->get("/properties/{$property->id}")
+             ->assertStatus(200)
+             ->assertViewHas('property');
+    }    
 }
