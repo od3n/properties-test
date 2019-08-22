@@ -66,4 +66,28 @@ class ManagePropertyTest extends TestCase
 
         $this->assertDatabaseHas('properties', $attributes);
     }
+
+    public function test_guest_cannot_update_a_property()
+    {
+        $property = factory(Property::class)->create();
+
+        $this->get("/properties/{$property->id}/edit")->assertRedirect('login');
+        $this->put("/properties/{$property->id}", [])->assertRedirect('login');
+    }
+
+    public function test_user_can_update_a_property()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+        $property = factory(Property::class)->create();
+
+        $property->name = 'Changed';
+
+        $this->actingAs($user)
+             ->put("/properties/{$property->id}", $property->toArray())
+             ->assertRedirect('/properties');
+
+        $this->assertDatabaseHas('properties', $property->toArray());
+    }
 }

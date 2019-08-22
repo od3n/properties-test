@@ -79,9 +79,13 @@ class PropertyController extends Controller
      * @param  \App\Property  $property
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Property $property)
+    public function update(PropertyRequest $request, Property $property)
     {
-        //
+        if ($property->update($request->validated())) {
+            return redirect('/properties');
+        }
+
+        abort(503);
     }
 
     /**
