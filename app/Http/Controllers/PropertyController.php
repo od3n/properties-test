@@ -32,7 +32,7 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        //
+        return view('property.create');
     }
 
     /**
