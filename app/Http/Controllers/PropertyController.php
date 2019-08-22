@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Property;
+use App\Http\Requests\PropertyRequest;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,9 +41,13 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PropertyRequest $request)
     {
-        //
+        if (Property::create($request->validated())) {
+            return redirect('/properties');
+        }
+
+        abort(503);
     }
 
     /**
@@ -59,7 +69,7 @@ class PropertyController extends Controller
      */
     public function edit(Property $property)
     {
-        //
+        return view('property.edit', compact('property'));
     }
 
     /**
