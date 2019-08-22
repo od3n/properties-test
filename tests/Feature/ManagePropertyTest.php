@@ -21,4 +21,9 @@ class ManagePropertyTest extends TestCase
              ->assertStatus(200)
              ->assertViewHasAll(['properties' => Property::all()]);
     }
+
+    public function test_that_welcomepage_redirects_to_properties()
+    {
+        $this->get('/')->assertRedirect('/properties');
+    }
 }
